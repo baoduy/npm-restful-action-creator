@@ -39,8 +39,9 @@ describe('Test Controller', () => {
   });
 
   test('PATCH todo', async () => {
-    let item = await todoRest.post({
+    let item = await todoRest.patch({
       params: { id: 1 },
+      isPathParams: true,
       data: { completed: true }
     });
 
