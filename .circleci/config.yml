@@ -36,4 +36,4 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # Build
-      - run: npm run git-jest && build && test-ci
+      - run: npm run git-jest && npm run build && npm run test-ci
