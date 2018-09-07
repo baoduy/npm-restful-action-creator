@@ -1,10 +1,9 @@
 {
-  "presets": ["@babel/env"],
-  "plugins": ["@babel/transform-modules-commonjs"],
-  "env": {
-    "test": {
-      "presets": ["@babel/env"],
-      "plugins": ["@babel/transform-modules-commonjs"]
-    }
-  }
+  "presets": [
+    "@babel/env"
+  ],
+  "plugins": [
+    "@babel/transform-modules-commonjs",
+    "source-map-support"
+  ]
 }
