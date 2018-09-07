@@ -20,8 +20,8 @@ export default class Controller {
     this.ins = axios.create(config);
   }
 
-  private getUrl = (config?: IRequestConfig) => {
-    if (!config || !config.isPathParams) return this.url;
+  private getUrl = (config: IRequestConfig) => {
+    if (!config.params || config.isPathParams === false) return this.url;
 
     let newUrl = this.url;
 
@@ -31,32 +31,52 @@ export default class Controller {
       newUrl = urljoin(newUrl, val.toString());
     });
 
-    //config.params = undefined;
     return newUrl;
+  };
+
+  private getConfig = (config?: IRequestConfig | object) => {
+    const c = <IRequestConfig>config;
+
+    if (c && (c.params || c.data))
+      return <IControllerConfig>{
+        data: c.data,
+        params: c.isPathParams === true ? undefined : c.params,
+        url: this.getUrl(c)
+      };
+
+    return <IControllerConfig>{ url: this.url, data: config, params: config };
   };
 
   public request = <T = any>(config: AxiosRequestConfig) =>
     this.ins.request<T>(config).then(rs => rs.data);
 
-  public get = <T = any>(config?: IRequestConfig) =>
-    this.ins.get<T>(this.getUrl(config), config).then(rs => rs.data);
+  public get = <T = any>(config?: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.get<T>(c.url, c).then(rs => rs.data);
+  };
 
-  public delete = (config: IRequestConfig) =>
-    this.ins.delete(this.getUrl(config), config).then(rs => true);
+  public delete = (config: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.delete(c.url, c).then(rs => true);
+  };
 
-  public head = (config?: IRequestConfig) =>
-    this.ins.head(this.getUrl(config), config).then(rs => rs.data);
+  public head = (config?: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.head(c.url, c).then(rs => rs.data);
+  };
 
-  public post = <T = any>(config: IRequestConfig) =>
-    this.ins
-      .post<T>(this.getUrl(config), config.data, config)
-      .then(rs => rs.data);
+  public post = <T = any>(config: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.post<T>(c.url, c.data, c).then(rs => rs.data);
+  };
 
-  public put = <T = any>(config: IRequestConfig) =>
-    this.ins.put<T>(this.getUrl(config), config.data).then(rs => rs.data);
+  public put = <T = any>(config: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.put<T>(c.url, c.data).then(rs => rs.data);
+  };
 
-  public patch = <T = any>(config: IRequestConfig) =>
-    this.ins
-      .patch<T>(this.getUrl(config), config.data, config)
-      .then(rs => rs.data);
+  public patch = <T = any>(config: IRequestConfig | object) => {
+    const c = this.getConfig(config);
+    return this.ins.patch<T>(c.url, c.data, c).then(rs => rs.data);
+  };
 }

@@ -1,7 +1,5 @@
-src
-public
-tests
-sample
+**/public
+**/tests
 .vscode
 .prettierrc
 sandbox.config.json

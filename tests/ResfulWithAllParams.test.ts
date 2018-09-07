@@ -1,22 +1,22 @@
 import ResfulCreator from '../src';
 
-const restful = ResfulCreator('https://jsonplaceholder.typicode.com');
+const restApi = ResfulCreator('https://jsonplaceholder.typicode.com');
 
 describe('Test Controller', () => {
-  const todoRest = restful.create('todos');
+  const todoApi = restApi.create('todos');
 
   test('get todo 1', async () => {
-    const item = await todoRest.get({ params: { id: 1 } });
-    expect(item).toHaveLength(1);
+    const item = await todoApi.get({ params: { id: 1 } });
+    expect(item).toHaveProperty('id');
   });
 
   test('get todo', async () => {
-    const item = await todoRest.get();
+    const item = await todoApi.get();
     expect(item.length).toBeGreaterThanOrEqual(10);
   });
 
   test('create, update todo', async () => {
-    let item = await todoRest.post({
+    let item = await todoApi.post({
       data: {
         userId: 1,
         title: 'Duy Hoang',
@@ -26,7 +26,7 @@ describe('Test Controller', () => {
 
     expect(item.title).toBe('Duy Hoang');
 
-    item = await todoRest.put({
+    item = await todoApi.put({
       params: { id: 1 },
       isPathParams: true,
       data: {
@@ -39,7 +39,7 @@ describe('Test Controller', () => {
   });
 
   test('PATCH todo', async () => {
-    let item = await todoRest.patch({
+    let item = await todoApi.patch({
       params: { id: 1 },
       isPathParams: true,
       data: { completed: true }
@@ -49,7 +49,7 @@ describe('Test Controller', () => {
   });
 
   test('DELETE todo', async () => {
-    let item = await todoRest.delete({
+    let item = await todoApi.delete({
       params: { id: 1 },
       isPathParams: true
     });
@@ -57,8 +57,8 @@ describe('Test Controller', () => {
     expect(item).toBe(true);
   });
 
-  test('Request todo', async () => {
-    let item = await todoRest.request({
+  test('Request DELETE todo', async () => {
+    let item = await todoApi.request({
       url: 'https://jsonplaceholder.typicode.com/todos/100',
       method: 'DELETE'
     });
@@ -67,7 +67,7 @@ describe('Test Controller', () => {
   });
 
   test('custom PUT todo', async () => {
-    let item = await todoRest.request({
+    let item = await todoApi.request({
       url: 'https://jsonplaceholder.typicode.com/todos/100',
       method: 'PUT',
       data: {
@@ -76,11 +76,11 @@ describe('Test Controller', () => {
       }
     });
 
-    expect(item).toBeDefined();
+    expect(item).toHaveProperty('id');
   });
 
   test('Test Head todo', async () => {
-    let item = await todoRest.head();
+    let item = await todoApi.head();
     expect(item).toBeDefined();
   });
 });
