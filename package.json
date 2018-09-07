@@ -15,8 +15,8 @@
     "publish:whole": "npm publish .",
     "publish:all": "npm-run-all build publish:whole",
     "codecov": "codecov -t",
-    "test": "npm run git:jest && jest --watch --coverage --config=configs/jest/ts.jest.json",
-    "test:ci": "npm run git:jest && jest --ci --coverage --config=configs/jest/ts.jest.json && npm run codecov"
+    "test": "jest --watch --coverage --config=configs/jest/ts.jest.json",
+    "test:ci": "jest --ci --coverage --config=configs/jest/ts.jest.json && npm run codecov"
   },
   "repository": {
     "type": "git",
@@ -34,10 +34,6 @@
     "url": "https://github.com/baoduy/Restful-Action-Creator/issues"
   },
   "homepage": "https://github.com/baoduy/Restful-Action-Creator#readme",
-  "jest": {
-    "coverageDirectory": "<rootDir>/tests/__coverage__/",
-    "collectCoverage": true
-  },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
@@ -55,5 +51,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0"
+  },
+  "jest": {
+    "coverageDirectory": "<rootDir>/tests/__coverage__/",
+    "collectCoverage": true
   }
 }

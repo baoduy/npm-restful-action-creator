@@ -332,3 +332,4 @@ ASALocalRun/
 **/package-lock.json
 **/dist
 **/lib
+**/**/__coverage__
