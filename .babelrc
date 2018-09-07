@@ -1,0 +1,10 @@
+{
+  "presets": ["@babel/env"],
+  "plugins": ["@babel/transform-modules-commonjs"],
+  "env": {
+    "test": {
+      "presets": ["@babel/env"],
+      "plugins": ["@babel/transform-modules-commonjs"]
+    }
+  }
+}
