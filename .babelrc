@@ -1,0 +1,9 @@
+{
+  "presets": [
+    "@babel/env"
+  ],
+  "plugins": [
+    "@babel/transform-modules-commonjs",
+    "source-map-support"
+  ]
+}
