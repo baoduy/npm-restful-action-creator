@@ -1,6 +1,6 @@
 {
   "name": "restful-action-creator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The helper lib to create the Restful commonicator for SPA.",
   "main": "dist/index.js",
   "directories": {
@@ -10,7 +10,6 @@
     "git-jest": "git submodule update --init --remote configs/jest",
     "clean": "rimraf -f -rmdir dist",
     "build": "npm run clean && tsc",
-    "transform": "node package.transform.js",
     "publish:dist": "npm publish dist",
     "publish:whole": "npm publish .",
     "publish:all": "npm-run-all build publish:whole",
