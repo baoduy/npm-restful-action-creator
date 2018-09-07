@@ -1,8 +1,13 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
+import * as urljoin from 'url-join';
+
+export interface IControllerConfig extends AxiosRequestConfig {
+  url: string;
+}
 
 export interface IRequestConfig {
   params?: any;
-  paramsSerializer?: (params: any) => string;
+  isPathParams?: boolean;
   data?: any;
 }
 
@@ -10,27 +15,48 @@ export default class Controller {
   ins: AxiosInstance;
   url: string;
 
-  constructor(config: AxiosRequestConfig) {
-    if (!config.url) throw 'The URL of config is required';
-
+  constructor(config: IControllerConfig) {
     this.url = config.url;
     this.ins = axios.create(config);
   }
 
-  public request = (config: IRequestConfig) => this.ins.request(config);
+  private getUrl = (config?: IRequestConfig) => {
+    if (!config || !config.isPathParams) return this.url;
 
-  public get = (config: IRequestConfig) => this.ins.get(this.url, config);
+    let newUrl = this.url;
 
-  public delete = (config: IRequestConfig) => this.ins.delete(this.url, config);
+    Object.getOwnPropertyNames(config.params).forEach(p => {
+      const val = config.params[p];
+      if (!val) return;
+      newUrl = urljoin(newUrl, val.toString());
+    });
 
-  public head = (config: IRequestConfig) => this.ins.head(this.url, config);
+    //config.params = undefined;
+    return newUrl;
+  };
 
-  public post = (config: IRequestConfig) =>
-    this.ins.post(this.url, config.data, config);
+  public request = <T = any>(config: AxiosRequestConfig) =>
+    this.ins.request<T>(config).then(rs => rs.data);
 
-  public put = (config: IRequestConfig) =>
-    this.ins.put(this.url, config.data, config);
+  public get = <T = any>(config?: IRequestConfig) =>
+    this.ins.get<T>(this.getUrl(config), config).then(rs => rs.data);
 
-  public patch = (config: IRequestConfig) =>
-    this.ins.patch(this.url, config.data, config);
+  public delete = (config: IRequestConfig) =>
+    this.ins.delete(this.getUrl(config), config).then(rs => true);
+
+  public head = (config?: IRequestConfig) =>
+    this.ins.head(this.getUrl(config), config).then(rs => rs.data);
+
+  public post = <T = any>(config: IRequestConfig) =>
+    this.ins
+      .post<T>(this.getUrl(config), config.data, config)
+      .then(rs => rs.data);
+
+  public put = <T = any>(config: IRequestConfig) =>
+    this.ins.put<T>(this.getUrl(config), config.data).then(rs => rs.data);
+
+  public patch = <T = any>(config: IRequestConfig) =>
+    this.ins
+      .patch<T>(this.getUrl(config), config.data, config)
+      .then(rs => rs.data);
 }

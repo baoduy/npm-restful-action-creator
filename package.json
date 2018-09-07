@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "git:jest": "git submodule update --init --remote configs/jest",
+    "git-jest": "git submodule update --init --remote configs/jest",
     "clean": "rimraf -f -rmdir dist",
     "build": "npm run clean && tsc",
     "transform": "node package.transform.js",
@@ -41,6 +41,7 @@
     "@babel/preset-env": "^7.0.0",
     "@types/jest": "^23.3.1",
     "@types/node": "^10.9.4",
+    "@types/url-join": "^0.8.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
     "babel-plugin-source-map-support": "^2.0.1",
@@ -52,7 +53,8 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "url-join": "^4.0.0"
   },
   "jest": {
     "coverageDirectory": "<rootDir>/tests/__coverage__/",

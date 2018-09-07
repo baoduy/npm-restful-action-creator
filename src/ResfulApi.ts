@@ -8,5 +8,5 @@ export default class ResfulApi {
     this.config = config;
   }
 
-  public create = (url: string) => new Controller({ url, ...this.config });
+  public create = (url: string) => new Controller({ ...this.config, url });
 }
