@@ -40,7 +40,7 @@ export default class Controller {
     if (c && (c.params || c.data))
       return <IControllerConfig>{
         data: c.data,
-        params: c.isPathParams === true ? undefined : c.params,
+        params: c.isPathParams === false ? c.params : undefined,
         url: this.getUrl(c)
       };
 

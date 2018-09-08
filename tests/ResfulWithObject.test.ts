@@ -1,6 +1,8 @@
-import ResfulCreator from '../src';
+import RestfulCreator from '../src';
 
-const restApi = ResfulCreator('https://jsonplaceholder.typicode.com');
+const restApi = RestfulCreator({
+  baseURL: 'https://jsonplaceholder.typicode.com'
+});
 
 describe('Test Controller', () => {
   const todoApi = restApi.create('todos');
@@ -25,7 +27,7 @@ describe('Test Controller', () => {
     expect(item.title).toBe('Duy Hoang');
 
     item = await todoApi.put({
-      params: { id: 1 },
+      params: { id: 1, title: null },
       data: {
         ...item,
         title: 'Duy Hoang 10'

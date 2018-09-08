@@ -1,6 +1,6 @@
-import Resful from './ResfulApi';
+import Restful from './RestfulApi';
 import { AxiosRequestConfig } from 'axios';
 
 export const createApi = (config: AxiosRequestConfig | string) =>
-  new Resful(config);
+  new Restful(config);
 export default createApi;
