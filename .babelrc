@@ -3,7 +3,7 @@
   "plugins": [
     "@babel/proposal-class-properties",
     "@babel/proposal-object-rest-spread",
-    "@babel/plugin-transform-runtime"
+    ["@babel/transform-runtime", { "useESModules": true }]
   ],
   "env": {
     "test": {
