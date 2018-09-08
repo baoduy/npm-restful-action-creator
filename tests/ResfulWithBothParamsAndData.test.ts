@@ -7,19 +7,20 @@ describe('Test Controller', () => {
 
   test('get by path param todo 1', async () => {
     const item = await todoApi.get({ params: { id: 1 } });
-    expect(item).toHaveProperty('id');
+    expect(item.data).toHaveProperty('id');
   });
 
   test('get todo 1', async () => {
     const item = await todoApi.get({ params: { id: 1 }, isPathParams: false });
-    expect(item).toHaveLength(1);
+    expect(item.data).toHaveLength(1);
   });
 
   test('get todo', async () => {
     const item = await todoApi.get();
-    expect(item.length).toBeGreaterThanOrEqual(10);
+    expect(item.data.length).toBeGreaterThanOrEqual(10);
   });
 
+  //--------------------------------
   test('create, update todo', async () => {
     let item = await todoApi.post({
       data: {
@@ -29,20 +30,21 @@ describe('Test Controller', () => {
       }
     });
 
-    expect(item.title).toBe('Duy Hoang');
+    expect(item.data.title).toBe('Duy Hoang');
 
     item = await todoApi.put({
       params: { id: 1 },
       isPathParams: true,
       data: {
-        ...item,
+        ...item.data,
         title: 'Duy Hoang 10'
       }
     });
 
-    expect(item.title).toBe('Duy Hoang 10');
+    expect(item.data.title).toBe('Duy Hoang 10');
   });
 
+  //--------------------------------
   test('PATCH todo', async () => {
     let item = await todoApi.patch({
       params: { id: 1 },
@@ -50,7 +52,7 @@ describe('Test Controller', () => {
       data: { completed: true }
     });
 
-    expect(item.completed).toBe(true);
+    expect(item.data.completed).toBe(true);
   });
 
   test('DELETE todo', async () => {
@@ -59,7 +61,7 @@ describe('Test Controller', () => {
       isPathParams: true
     });
 
-    expect(item).toBe(true);
+    expect(item.data).toBeDefined();
   });
 
   test('Request DELETE todo', async () => {
@@ -68,7 +70,7 @@ describe('Test Controller', () => {
       method: 'DELETE'
     });
 
-    expect(item).toBeDefined();
+    expect(item.data).toBeDefined();
   });
 
   test('custom PUT todo', async () => {
@@ -81,11 +83,11 @@ describe('Test Controller', () => {
       }
     });
 
-    expect(item).toHaveProperty('id');
+    expect(item.data).toHaveProperty('id');
   });
 
   test('Test Head todo', async () => {
     let item = await todoApi.head();
-    expect(item).toBeDefined();
+    expect(item.data).toBeDefined();
   });
 });
