@@ -1,13 +1,18 @@
-import ResfulCreator from '../src';
+import RestfulCreator from '../src';
 
-const restApi = ResfulCreator('https://jsonplaceholder.typicode.com');
+const restApi = RestfulCreator('https://jsonplaceholder.typicode.com');
 
 describe('Test Controller', () => {
   const todoApi = restApi.create('todos');
 
-  test('get todo 1', async () => {
+  test('get by path param todo 1', async () => {
     const item = await todoApi.get({ params: { id: 1 } });
     expect(item).toHaveProperty('id');
+  });
+
+  test('get todo 1', async () => {
+    const item = await todoApi.get({ params: { id: 1 }, isPathParams: false });
+    expect(item).toHaveLength(1);
   });
 
   test('get todo', async () => {
