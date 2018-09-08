@@ -48,35 +48,35 @@ export default class Controller {
   };
 
   public request = <T = any>(config: AxiosRequestConfig) =>
-    this.ins.request<T>(config).then(rs => rs.data);
+    this.ins.request<T>(config);
 
   public get = <T = any>(config?: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.get<T>(c.url, c).then(rs => rs.data);
+    return this.ins.get<T>(c.url, c);
   };
 
   public delete = (config: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.delete(c.url, c).then(rs => true);
+    return this.ins.delete(c.url, c);
   };
 
   public head = (config?: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.head(c.url, c).then(rs => rs.data);
+    return this.ins.head(c.url, c);
   };
 
   public post = <T = any>(config: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.post<T>(c.url, c.data, c).then(rs => rs.data);
+    return this.ins.post<T>(c.url, c.data, c);
   };
 
   public put = <T = any>(config: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.put<T>(c.url, c.data).then(rs => rs.data);
+    return this.ins.put<T>(c.url, c.data);
   };
 
   public patch = <T = any>(config: IRequestConfig | object) => {
     const c = this.getConfig(config);
-    return this.ins.patch<T>(c.url, c.data, c).then(rs => rs.data);
+    return this.ins.patch<T>(c.url, c.data, c);
   };
 }

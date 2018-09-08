@@ -9,12 +9,12 @@ describe('Test Controller', () => {
 
   test('get todo 1', async () => {
     const item = await todoApi.get({ id: 1 });
-    expect(item).toHaveLength(1);
+    expect(item.data).toHaveLength(1);
   });
 
   test('get todo', async () => {
     const item = await todoApi.get();
-    expect(item.length).toBeGreaterThanOrEqual(10);
+    expect(item.data.length).toBeGreaterThanOrEqual(10);
   });
 
   test('create, update todo', async () => {
@@ -24,34 +24,34 @@ describe('Test Controller', () => {
       completed: false
     });
 
-    expect(item.title).toBe('Duy Hoang');
+    expect(item.data.title).toBe('Duy Hoang');
 
     item = await todoApi.put({
       params: { id: 1, title: null },
       data: {
-        ...item,
+        ...item.data,
         title: 'Duy Hoang 10'
       }
     });
 
-    expect(item.title).toBe('Duy Hoang 10');
+    expect(item.data.title).toBe('Duy Hoang 10');
   });
 
   test('PATCH todo', async () => {
     let item = await todoApi.patch({
-      params: { id: 1 },
+      params: { id: 2 },
       data: { completed: true }
     });
 
-    expect(item.completed).toBe(true);
+    expect(item.data.completed).toBe(true);
   });
 
-  test('DELETE todo', async () => {
+  test('DELETE todo with obj param', async () => {
     let item = await todoApi.delete({
-      params: { id: 1 }
+      params: { id: 2 }
     });
 
-    expect(item).toBe(true);
+    expect(item.data).toBeDefined();
   });
 
   test('Request DELETE todo', async () => {
@@ -60,7 +60,7 @@ describe('Test Controller', () => {
       method: 'DELETE'
     });
 
-    expect(item).toBeDefined();
+    expect(item.data).toBeDefined();
   });
 
   test('Request GET todo', async () => {
@@ -69,6 +69,6 @@ describe('Test Controller', () => {
       method: 'GET'
     });
 
-    expect(item).toHaveProperty('id');
+    expect(item.data).toHaveProperty('id');
   });
 });
