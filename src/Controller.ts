@@ -5,10 +5,18 @@ export interface IControllerConfig extends AxiosRequestConfig {
   url: string;
 }
 
+/**
+ *The request parameters.
+ * @pathParams  : the adition path will be added to the original url ex: 'originalUrl/1/subitems/2'
+ * @params      : the original @params of AxiosRequestConfig
+ * @data        : the original @data of AxiosRequestConfig
+ * @export
+ * @interface IRequestConfig
+ */
 export interface IRequestConfig {
-  params?: any;
-  isPathParams?: boolean;
-  data?: any;
+  pathParams?: object | Array<string> | string;
+  params?: object;
+  data?: object;
 }
 
 export default class Controller {
@@ -20,63 +28,98 @@ export default class Controller {
     this.ins = axios.create(config);
   }
 
-  private getUrl = (config: IRequestConfig) => {
-    if (!config.params || config.isPathParams === false) return this.url;
+  private getUrl = (pathParams?: object | Array<string> | string) => {
+    if (!pathParams) return this.url;
 
-    let newUrl = this.url;
+    let newPath = '';
 
-    Object.getOwnPropertyNames(config.params).forEach(p => {
-      const val = config.params[p];
-      if (!val) return;
-      newUrl = urljoin(newUrl, val.toString());
-    });
+    if (typeof pathParams === 'string') newPath = pathParams;
+    else if (Array.isArray(pathParams))
+      (<Array<any>>pathParams).forEach(element => {
+        if (!element) return;
+        newPath = urljoin(newPath, element.toString());
+      });
+    else
+      Object.getOwnPropertyNames(pathParams).forEach(p => {
+        const val = pathParams[p];
+        if (!val) return;
+        newPath = urljoin(newPath, val.toString());
+      });
 
-    return newUrl;
+    return urljoin(this.url, newPath);
   };
 
-  private getConfig = (config?: IRequestConfig | object) => {
-    const c = <IRequestConfig>config;
-
-    if (c && (c.params || c.data))
-      return <IControllerConfig>{
-        data: c.data,
-        params: c.isPathParams === false ? c.params : undefined,
-        url: this.getUrl(c)
-      };
-
-    return <IControllerConfig>{ url: this.url, data: config, params: config };
-  };
-
+  /**
+   *The original request of Axios
+   *
+   * @memberof Controller
+   */
   public request = <T = any>(config: AxiosRequestConfig) =>
     this.ins.request<T>(config);
 
-  public get = <T = any>(config?: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.get<T>(c.url, c);
-  };
+  /**
+   *GET action
+   *
+   * @memberof Controller
+   */
+  public get = <T = any>(config?: IRequestConfig) =>
+    this.ins.get<T>(this.getUrl(config ? config.pathParams : undefined), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 
-  public delete = (config: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.delete(c.url, c);
-  };
+  /**
+   *DELETE action
+   *
+   * @memberof Controller
+   */
+  public delete = (config: IRequestConfig) =>
+    this.ins.delete(this.getUrl(config.pathParams), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 
-  public head = (config?: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.head(c.url, c);
-  };
+  /**
+   *retreive header only of request.
+   *
+   * @memberof Controller
+   */
+  public head = (config?: IRequestConfig) =>
+    this.ins.head(this.getUrl(config ? config.pathParams : undefined), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 
-  public post = <T = any>(config: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.post<T>(c.url, c.data, c);
-  };
+  /**
+   *POST action
+   *
+   * @memberof Controller
+   */
+  public post = <T = any>(config: IRequestConfig) =>
+    this.ins.post<T>(this.getUrl(config.pathParams), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 
-  public put = <T = any>(config: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.put<T>(c.url, c.data);
-  };
+  /**
+   *PUT action
+   *
+   * @memberof Controller
+   */
+  public put = <T = any>(config: IRequestConfig) =>
+    this.ins.put<T>(this.getUrl(config.pathParams), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 
-  public patch = <T = any>(config: IRequestConfig | object) => {
-    const c = this.getConfig(config);
-    return this.ins.patch<T>(c.url, c.data, c);
-  };
+  /**
+   *PATCH action
+   *
+   * @memberof Controller
+   */
+  public patch = <T = any>(config: IRequestConfig) =>
+    this.ins.patch<T>(this.getUrl(config.pathParams), {
+      params: config ? config.params : undefined,
+      data: config ? config.data : undefined
+    });
 }

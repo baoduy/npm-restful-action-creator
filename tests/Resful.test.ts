@@ -6,12 +6,12 @@ describe('Test Controller', () => {
   const todoApi = restApi.create('todos');
 
   test('get by path param todo 1', async () => {
-    const item = await todoApi.get({ params: { id: 1 } });
+    const item = await todoApi.get({ pathParams: '1' });
     expect(item.data).toHaveProperty('id');
   });
 
   test('get todo 1', async () => {
-    const item = await todoApi.get({ params: { id: 1 }, isPathParams: false });
+    const item = await todoApi.get({ pathParams: { id: 1 } });
     expect(item.data).toHaveLength(1);
   });
 
@@ -33,8 +33,7 @@ describe('Test Controller', () => {
     expect(item.data.title).toBe('Duy Hoang');
 
     item = await todoApi.put({
-      params: { id: 1 },
-      isPathParams: true,
+      pathParams: [1],
       data: {
         ...item.data,
         title: 'Duy Hoang 10'
@@ -47,8 +46,7 @@ describe('Test Controller', () => {
   //--------------------------------
   test('PATCH todo', async () => {
     let item = await todoApi.patch({
-      params: { id: 1 },
-      isPathParams: true,
+      pathParams: [1],
       data: { completed: true }
     });
 
@@ -57,8 +55,7 @@ describe('Test Controller', () => {
 
   test('DELETE todo', async () => {
     let item = await todoApi.delete({
-      params: { id: 1 },
-      isPathParams: true
+      pathParams: { id: 1 }
     });
 
     expect(item.data).toBeDefined();
