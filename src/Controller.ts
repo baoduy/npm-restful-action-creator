@@ -58,8 +58,8 @@ export default class Controller {
    */
   public delete = (config: IRequestConfig) =>
     this.ins.delete(this.getUrl(config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+      params: config.params,
+      data: config.data
     });
 
   /**
@@ -80,8 +80,8 @@ export default class Controller {
    */
   public post = <T = any>(config: IRequestConfig) =>
     this.ins.post<T>(this.getUrl(config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+      params: config.params,
+      data: config.data
     });
 
   /**
@@ -91,8 +91,8 @@ export default class Controller {
    */
   public put = <T = any>(config: IRequestConfig) =>
     this.ins.put<T>(this.getUrl(config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+      params: config.params,
+      data: config.data
     });
 
   /**
@@ -102,7 +102,7 @@ export default class Controller {
    */
   public patch = <T = any>(config: IRequestConfig) =>
     this.ins.patch<T>(this.getUrl(config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+      params: config.params,
+      data: config.data
     });
 }

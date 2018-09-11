@@ -24,15 +24,20 @@ describe('Test Controller', () => {
   test('create, update todo', async () => {
     //Create
     let item = await todoApi.post({
+      params: {
+        userId: 1,
+        title: 'Duy Hoang params',
+        completed: false
+      },
       data: {
         userId: 1,
-        title: 'Duy Hoang',
+        title: 'Duy Hoang data',
         completed: false
       }
     });
 
-    expect(item.data.title).toBe('Duy Hoang');
-    
+    expect(item.data.title).toBe('Duy Hoang data');
+
     //Update
     item = await todoApi.put({
       pathParams: [1],
@@ -49,7 +54,8 @@ describe('Test Controller', () => {
   test('PATCH todo', async () => {
     let item = await todoApi.patch({
       pathParams: [1],
-      data: { completed: true }
+      params: { completed: true },
+      data: { completed: false }
     });
 
     expect(item.data.completed).toBe(true);
