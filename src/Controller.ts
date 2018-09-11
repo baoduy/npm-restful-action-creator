@@ -1,9 +1,16 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
-
 import { mergeUrl } from './helper';
 
+/**
+ *Controller configuration
+ *if debug === true then it will log the url to console
+ * @export
+ * @interface IControllerConfig
+ * @extends {AxiosRequestConfig}
+ */
 export interface IControllerConfig extends AxiosRequestConfig {
   url: string;
+  debug?: boolean;
 }
 
 /**
@@ -23,14 +30,19 @@ export interface IRequestConfig {
 export default class Controller {
   ins: AxiosInstance;
   url: string;
+  debug?: boolean;
 
   constructor(config: IControllerConfig) {
     this.url = config.url;
+    this.debug = config.debug;
     this.ins = axios.create(config);
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string) =>
-    mergeUrl(this.url, pathParams);
+  private getUrl = (pathParams?: object | Array<any> | string) => {
+    const finalUrl = mergeUrl(this.url, pathParams);
+    if (this.debug === true) console.log(finalUrl);
+    return finalUrl;
+  };
 
   /**
    *The original request of Axios
@@ -89,20 +101,18 @@ export default class Controller {
    *
    * @memberof Controller
    */
-  public put = <T = any>(config: IRequestConfig) =>
-    this.ins.put<T>(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public put = <T = any>(config: IRequestConfig) => {
+    if (!config.data) throw 'data is required';
+    return this.ins.put<T>(this.getUrl(config.pathParams), config.data);
+  };
 
   /**
    *PATCH action
    *
    * @memberof Controller
    */
-  public patch = <T = any>(config: IRequestConfig) =>
-    this.ins.patch<T>(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public patch = <T = any>(config: IRequestConfig) => {
+    if (!config.data) throw 'data is required';
+    return this.ins.patch<T>(this.getUrl(config.pathParams), config.data);
+  };
 }

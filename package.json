@@ -1,6 +1,6 @@
 {
   "name": "restful-action-creator",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The helper lib to create the Restful commonicator for SPA.",
   "main": "lib/index.js",
   "directories": {
@@ -48,6 +48,7 @@
     "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
     "@types/url-join": "^0.8.2",
+    "axios-mock-adapter": "^1.15.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "jest": "^23.6.0",
