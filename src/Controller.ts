@@ -14,7 +14,7 @@ export interface IControllerConfig extends AxiosRequestConfig {
  * @interface IRequestConfig
  */
 export interface IRequestConfig {
-  pathParams?: object | Array<string> | string;
+  pathParams?: object | Array<any> | string;
   params?: object;
   data?: object;
 }
@@ -28,7 +28,7 @@ export default class Controller {
     this.ins = axios.create(config);
   }
 
-  private getUrl = (pathParams?: object | Array<string> | string) => {
+  private getUrl = (pathParams?: object | Array<any> | string) => {
     if (!pathParams) return this.url;
 
     let newPath = '';
@@ -63,9 +63,9 @@ export default class Controller {
    * @memberof Controller
    */
   public get = <T = any>(config?: IRequestConfig) =>
-    this.ins.get<T>(this.getUrl(config ? config.pathParams : undefined), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+    this.ins.get<T>(this.getUrl(config && config.pathParams), {
+      params: config && config.params,
+      data: config && config.data
     });
 
   /**
@@ -75,8 +75,8 @@ export default class Controller {
    */
   public delete = (config: IRequestConfig) =>
     this.ins.delete(this.getUrl(config.pathParams), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+      params: config && config.params,
+      data: config && config.data
     });
 
   /**
@@ -85,9 +85,9 @@ export default class Controller {
    * @memberof Controller
    */
   public head = (config?: IRequestConfig) =>
-    this.ins.head(this.getUrl(config ? config.pathParams : undefined), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+    this.ins.head(this.getUrl(config && config.pathParams), {
+      params: config && config.params,
+      data: config && config.data
     });
 
   /**
@@ -97,8 +97,8 @@ export default class Controller {
    */
   public post = <T = any>(config: IRequestConfig) =>
     this.ins.post<T>(this.getUrl(config.pathParams), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+      params: config && config.params,
+      data: config && config.data
     });
 
   /**
@@ -108,8 +108,8 @@ export default class Controller {
    */
   public put = <T = any>(config: IRequestConfig) =>
     this.ins.put<T>(this.getUrl(config.pathParams), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+      params: config && config.params,
+      data: config && config.data
     });
 
   /**
@@ -119,7 +119,7 @@ export default class Controller {
    */
   public patch = <T = any>(config: IRequestConfig) =>
     this.ins.patch<T>(this.getUrl(config.pathParams), {
-      params: config ? config.params : undefined,
-      data: config ? config.data : undefined
+      params: config && config.params,
+      data: config && config.data
     });
 }

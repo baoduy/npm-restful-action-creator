@@ -11,7 +11,7 @@ describe('Test Controller', () => {
   });
 
   test('get todo 1', async () => {
-    const item = await todoApi.get({ pathParams: { id: 1 } });
+    const item = await todoApi.get({ params: { id: 1 } });
     expect(item.data).toHaveLength(1);
   });
 
@@ -22,6 +22,7 @@ describe('Test Controller', () => {
 
   //--------------------------------
   test('create, update todo', async () => {
+    //Create
     let item = await todoApi.post({
       data: {
         userId: 1,
@@ -31,7 +32,8 @@ describe('Test Controller', () => {
     });
 
     expect(item.data.title).toBe('Duy Hoang');
-
+    
+    //Update
     item = await todoApi.put({
       pathParams: [1],
       data: {

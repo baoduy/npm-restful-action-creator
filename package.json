@@ -11,11 +11,12 @@
     "clean": "rimraf -f -rmdir lib",
     "build-types": "tsc",
     "build-js": "babel src --out-dir lib --extensions '.ts,.tsx'",
-    "build": "npm-run-all clean build-types build-js",
+    "build": "npm-run-all clean build-types build-js test-bundle",
     "publish:dist": "npm publish lib",
     "publish:whole": "npm publish .",
     "publish:all": "npm-run-all build publish:whole",
     "codecov": "codecov -t 48afb0d5-3dd1-4c5e-b761-23abbfdf9aba",
+    "test-bundle": "bundlesize",
     "test": "jest --watch --coverage --config=configs/jest/ts.jest.json",
     "test-ci": "jest --ci --coverage --config=configs/jest/ts.jest.json && npm run codecov"
   },
@@ -56,12 +57,25 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "axios": "^0.18.0",
-    "url-join": "^4.0.0",
-    "@babel/runtime": "^7.0.0"
+    "bundlesize": "^0.17.0",
+    "url-join": "^4.0.0"
   },
   "jest": {
     "coverageDirectory": "<rootDir>/tests/__coverage__/",
     "collectCoverage": true
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./dist/*.*",
+      "compression": "gzip",
+      "maxSize": "500 B"
+    },
+    {
+      "path": "./dist/*.*",
+      "compression": "none",
+      "maxSize": "2 kB"
+    }
+  ]
 }
