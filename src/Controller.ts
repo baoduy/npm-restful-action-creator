@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
-import * as urljoin from 'url-join';
+
+import { mergeUrl } from './helper';
 
 export interface IControllerConfig extends AxiosRequestConfig {
   url: string;
@@ -28,26 +29,8 @@ export default class Controller {
     this.ins = axios.create(config);
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string) => {
-    if (!pathParams) return this.url;
-
-    let newPath = '';
-
-    if (typeof pathParams === 'string') newPath = pathParams;
-    else if (Array.isArray(pathParams))
-      (<Array<any>>pathParams).forEach(element => {
-        if (!element) return;
-        newPath = urljoin(newPath, element.toString());
-      });
-    else
-      Object.getOwnPropertyNames(pathParams).forEach(p => {
-        const val = pathParams[p];
-        if (!val) return;
-        newPath = urljoin(newPath, val.toString());
-      });
-
-    return urljoin(this.url, newPath);
-  };
+  private getUrl = (pathParams?: object | Array<any> | string) =>
+    mergeUrl(this.url, pathParams);
 
   /**
    *The original request of Axios
