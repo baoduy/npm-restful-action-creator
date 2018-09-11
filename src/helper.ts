@@ -3,7 +3,7 @@ import * as urljoin from 'url-join';
 const convertToArray = (obj: any): Array<any> => {
   if (typeof obj === 'object')
     return Object.getOwnPropertyNames(obj).map(p => obj[p]);
-  return Array.isArray(obj) ? <Array<any>>obj : [];
+  return Array.isArray(obj) ? obj : [];
 };
 
 export const mergeUrl = (
