@@ -1,5 +1,6 @@
 **/public
 **/tests
+**/config
 .vscode
 .prettierrc
 sandbox.config.json

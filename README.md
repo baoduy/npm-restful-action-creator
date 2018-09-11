@@ -7,4 +7,6 @@
 [![Dependencies](https://img.shields.io/david/baoduy/Restful-Action-Creator.svg)](https://david-dm.org/baoduy/Restful-Action-Creator)
 [![DevDependencies](https://img.shields.io/david/dev/baoduy/Restful-Action-Creator.svg)](https://david-dm.org/baoduy/Restful-Action-Creator?type=develop)
 
-The helper class for SAP Restful Api communication
+The helper class for SAP Restful Api communication.
+
+_Document is updating. So meantime, please check out the unit tests under tests folder for reference. I will try my best to update the document as soon as possible._
