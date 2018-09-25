@@ -1,4 +1,4 @@
-import * as urljoin from 'url-join';
+import urljoin from 'url-join';
 
 const convertToArray = (obj: any): Array<any> =>
   Array.isArray(obj) ? obj : Object.getOwnPropertyNames(obj).map(p => obj[p]);
