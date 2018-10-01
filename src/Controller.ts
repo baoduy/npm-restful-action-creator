@@ -3,14 +3,12 @@ import { mergeUrl } from './helper';
 
 /**
  *Controller configuration
- *if debug === true then it will log the url to console
  * @export
  * @interface IControllerConfig
  * @extends {AxiosRequestConfig}
  */
 export interface IControllerConfig extends AxiosRequestConfig {
   url: string;
-  debug?: boolean;
 }
 
 /**
@@ -27,52 +25,70 @@ export interface IRequestConfig {
   data?: object;
 }
 
-export default class Controller {
-  ins: AxiosInstance;
-  url: string;
-  debug?: boolean;
+export default class {
+  private axiosInstance: AxiosInstance;
+  private url: string;
 
   constructor(config: IControllerConfig) {
     this.url = config.url;
-    this.debug = config.debug;
-    this.ins = axios.create(config);
+    this.axiosInstance = axios.create(config);
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string) => {
+  private getUrl = (pathParams?: object | Array<any> | string | number) => {
     const finalUrl = mergeUrl(this.url, pathParams);
-    if (this.debug === true) console.log(finalUrl);
     return finalUrl;
   };
 
+  private isRequestConfig = (obj?: any) =>
+    obj &&
+    (obj.hasOwnProperty('pathParams') ||
+      obj.hasOwnProperty('params') ||
+      obj.hasOwnProperty('data'));
   /**
    *The original request of Axios
    *
    * @memberof Controller
    */
   public request = <T = any>(config: AxiosRequestConfig) =>
-    this.ins.request<T>(config);
+    this.axiosInstance.request<T>(config);
 
   /**
    *GET action
-   *
+   * get method. if config is not IRequestConfig it will pass as  params
    * @memberof Controller
    */
-  public get = <T = any>(config?: IRequestConfig) =>
-    this.ins.get<T>(this.getUrl(config && config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+  public get = <T = any>(config?: IRequestConfig | object) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
+        params: p.params,
+        data: p.data
+      });
+    }
+
+    return this.axiosInstance.get<T>(this.getUrl(), {
+      params: config
     });
+  };
 
   /**
-   *DELETE action
+   *DELETE method. if config is not IRequestConfig it will pass as  pathParams
    *
    * @memberof Controller
    */
-  public delete = (config: IRequestConfig) =>
-    this.ins.delete(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public delete = (
+    config: IRequestConfig | any | Array<any> | string | number
+  ) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.delete(this.getUrl(p.pathParams), {
+        params: p.params,
+        data: p.data
+      });
+    }
+
+    return this.axiosInstance.delete(this.getUrl(config));
+  };
 
   /**
    *retreive header only of request.
@@ -80,21 +96,24 @@ export default class Controller {
    * @memberof Controller
    */
   public head = (config?: IRequestConfig) =>
-    this.ins.head(this.getUrl(config && config.pathParams), {
+    this.axiosInstance.head(this.getUrl(config && config.pathParams), {
       params: config && config.params,
       data: config && config.data
     });
 
   /**
-   *POST action
+   *POST action. if config is not IRequestConfig it will pass as data.
    *
    * @memberof Controller
    */
-  public post = <T = any>(config: IRequestConfig) =>
-    this.ins.post<T>(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public post = <T = any>(config: IRequestConfig | object) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data);
+    }
+
+    return this.axiosInstance.post<T>(this.getUrl(), config);
+  };
 
   /**
    *PUT action
@@ -103,7 +122,10 @@ export default class Controller {
    */
   public put = <T = any>(config: IRequestConfig) => {
     if (!config.data) throw 'data is required';
-    return this.ins.put<T>(this.getUrl(config.pathParams), config.data);
+    return this.axiosInstance.put<T>(
+      this.getUrl(config.pathParams),
+      config.data
+    );
   };
 
   /**
@@ -113,6 +135,9 @@ export default class Controller {
    */
   public patch = <T = any>(config: IRequestConfig) => {
     if (!config.data) throw 'data is required';
-    return this.ins.patch<T>(this.getUrl(config.pathParams), config.data);
+    return this.axiosInstance.patch<T>(
+      this.getUrl(config.pathParams),
+      config.data
+    );
   };
 }
