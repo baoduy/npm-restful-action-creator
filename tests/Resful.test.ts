@@ -24,7 +24,7 @@ describe('Test Controller', () => {
     .onHead('tests')
     .reply(200)
     .onAny()
-    .reply(config => {
+    .reply((config: any) => {
       console.log(config);
       return new Promise(resolve => resolve([201, { success: true }]));
     });
@@ -80,7 +80,7 @@ describe('Test Controller', () => {
   test('PUT with NULL data', async () => {
     //Create
     try {
-      let item = await todoApi.put({
+      await todoApi.put({
         pathParams: [10]
       });
     } catch (ex) {
@@ -101,7 +101,7 @@ describe('Test Controller', () => {
 
   test('PATCH with NULL data', async () => {
     try {
-      let item = await todoApi.patch({
+      await todoApi.patch({
         pathParams: [10]
       });
     } catch (ex) {

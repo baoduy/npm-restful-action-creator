@@ -24,7 +24,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
   "include": [
     "./src/**/*.tsx",
