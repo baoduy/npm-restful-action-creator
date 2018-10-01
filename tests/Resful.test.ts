@@ -2,7 +2,7 @@ import RestfulCreator from '../src';
 var MockAdapter = require('axios-mock-adapter');
 var axios = require('axios');
 
-const restApi = RestfulCreator({ baseURL: 'http://test/api', debug: true });
+const restApi = RestfulCreator({ baseURL: 'http://test/api' });
 var mock = new MockAdapter(axios);
 
 describe('Test Controller', () => {
