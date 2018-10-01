@@ -60,7 +60,7 @@ describe('Test Controller', () => {
       data: { id: 10 }
     });
 
-    expect(item.config.data).toBe('{"data":{"id":10}}');
+    expect(item.config.data).toBe('{"id":10}');
     expect(item.config.params).toBeUndefined();
     expect(item.config.url).toContain('tests');
   });

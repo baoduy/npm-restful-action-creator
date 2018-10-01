@@ -34,11 +34,16 @@ export default class {
     this.axiosInstance = axios.create(config);
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string) => {
+  private getUrl = (pathParams?: object | Array<any> | string | number) => {
     const finalUrl = mergeUrl(this.url, pathParams);
     return finalUrl;
   };
 
+  private isRequestConfig = (obj?: any) =>
+    obj &&
+    (obj.hasOwnProperty('pathParams') ||
+      obj.hasOwnProperty('params') ||
+      obj.hasOwnProperty('data'));
   /**
    *The original request of Axios
    *
@@ -49,25 +54,41 @@ export default class {
 
   /**
    *GET action
-   *
+   * get method. if config is not IRequestConfig it will pass as  params
    * @memberof Controller
    */
-  public get = <T = any>(config?: IRequestConfig) =>
-    this.axiosInstance.get<T>(this.getUrl(config && config.pathParams), {
-      params: config && config.params,
-      data: config && config.data
+  public get = <T = any>(config?: IRequestConfig | object) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
+        params: p.params,
+        data: p.data
+      });
+    }
+
+    return this.axiosInstance.get<T>(this.getUrl(), {
+      params: config
     });
+  };
 
   /**
-   *DELETE action
+   *DELETE method. if config is not IRequestConfig it will pass as  pathParams
    *
    * @memberof Controller
    */
-  public delete = (config: IRequestConfig) =>
-    this.axiosInstance.delete(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public delete = (
+    config: IRequestConfig | any | Array<any> | string | number
+  ) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.delete(this.getUrl(p.pathParams), {
+        params: p.params,
+        data: p.data
+      });
+    }
+
+    return this.axiosInstance.delete(this.getUrl(config));
+  };
 
   /**
    *retreive header only of request.
@@ -81,15 +102,18 @@ export default class {
     });
 
   /**
-   *POST action
+   *POST action. if config is not IRequestConfig it will pass as data.
    *
    * @memberof Controller
    */
-  public post = <T = any>(config: IRequestConfig) =>
-    this.axiosInstance.post<T>(this.getUrl(config.pathParams), {
-      params: config.params,
-      data: config.data
-    });
+  public post = <T = any>(config: IRequestConfig | object) => {
+    if (this.isRequestConfig(config)) {
+      const p = <IRequestConfig>config;
+      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data);
+    }
+
+    return this.axiosInstance.post<T>(this.getUrl(), config);
+  };
 
   /**
    *PUT action
