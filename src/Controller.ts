@@ -20,7 +20,7 @@ export interface IControllerConfig extends AxiosRequestConfig {
  * @interface IRequestConfig
  */
 export interface IRequestConfig {
-  pathParams?: object | Array<any> | string;
+  pathParams?: object | Array<any> | string | number;
   params?: object;
   data?: object;
 }

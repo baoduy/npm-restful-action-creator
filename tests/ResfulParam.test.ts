@@ -1,7 +1,7 @@
 import RestfulCreator from '../src';
 
 const restApi = RestfulCreator({
-  baseURL: 'https://jsonplaceholder.typicode.com'
+  baseURL: 'http://jsonplaceholder.typicode.com'
 });
 
 describe('Test comments', () => {
@@ -22,7 +22,7 @@ describe('Test comments', () => {
       title: 'Duy Hoang',
       body: 'Duy Hoang'
     });
-    
+
     expect(item.data).toMatchObject({
       title: 'Duy Hoang',
       body: 'Duy Hoang'
@@ -32,5 +32,15 @@ describe('Test comments', () => {
   test('delete', async () => {
     const item = await todoApi.delete(1);
     expect(item.request._header).toContain('DELETE /posts/1');
+  });
+
+  test('GET pathParams array', async () => {
+    const item = await todoApi.get({ pathParams: [1] });
+    expect(item.request._header).toContain('GET /posts/1');
+  });
+
+  test('GET pathParams value', async () => {
+    const item = await todoApi.get({ pathParams: 1 });
+    expect(item.request._header).toContain('GET /posts/1');
   });
 });
