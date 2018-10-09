@@ -1,15 +1,10 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { mergeUrl } from './helper';
-
-/**
- *Controller configuration
- * @export
- * @interface IControllerConfig
- * @extends {AxiosRequestConfig}
- */
-export interface IControllerConfig extends AxiosRequestConfig {
-  url: string;
-}
+import {
+  ErrorHandler,
+  ControllerConfig,
+  RequestConfig
+} from './InterfaceTypes';
 
 /**
  *The request parameters.
@@ -17,21 +12,21 @@ export interface IControllerConfig extends AxiosRequestConfig {
  * @params      : the original @params of AxiosRequestConfig
  * @data        : the original @data of AxiosRequestConfig
  * @export
- * @interface IRequestConfig
+ * @interface RequestConfig
  */
-export interface IRequestConfig {
-  pathParams?: object | Array<any> | string | number;
-  params?: object;
-  data?: object;
-}
 
 export default class {
   private axiosInstance: AxiosInstance;
   private url: string;
+  private errorHandler?: ErrorHandler;
 
-  constructor(config: IControllerConfig) {
+  constructor(config: ControllerConfig) {
     this.url = config.url;
+    this.errorHandler = config.errorHandler;
+
     this.axiosInstance = axios.create(config);
+    //Apply error handler
+    this.applyErrorHandler();
   }
 
   private getUrl = (pathParams?: object | Array<any> | string | number) => {
@@ -44,6 +39,18 @@ export default class {
     (obj.hasOwnProperty('pathParams') ||
       obj.hasOwnProperty('params') ||
       obj.hasOwnProperty('data'));
+
+  /**
+   * If ErrorHandler is provided in the configuration then it will be enabled automatically.
+   * In-case you disabled it then use this method to re-enable it.
+   */
+  private applyErrorHandler() {
+    if (!this.errorHandler) return;
+
+    this.axiosInstance.interceptors.request.use(undefined, this.errorHandler);
+    this.axiosInstance.interceptors.response.use(undefined, this.errorHandler);
+  }
+
   /**
    *The original request of Axios
    *
@@ -57,9 +64,9 @@ export default class {
    * get method. if config is not IRequestConfig it will pass as  params
    * @memberof Controller
    */
-  public get = <T = any>(config?: IRequestConfig | object) => {
+  public get = <T = any>(config?: RequestConfig | object) => {
     if (this.isRequestConfig(config)) {
-      const p = <IRequestConfig>config;
+      const p = <RequestConfig>config;
       return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
         params: p.params,
         data: p.data
@@ -77,10 +84,10 @@ export default class {
    * @memberof Controller
    */
   public delete = (
-    config: IRequestConfig | any | Array<any> | string | number
+    config: RequestConfig | any | Array<any> | string | number
   ) => {
     if (this.isRequestConfig(config)) {
-      const p = <IRequestConfig>config;
+      const p = <RequestConfig>config;
       return this.axiosInstance.delete(this.getUrl(p.pathParams), {
         params: p.params,
         data: p.data
@@ -95,7 +102,7 @@ export default class {
    *
    * @memberof Controller
    */
-  public head = (config?: IRequestConfig) =>
+  public head = (config?: RequestConfig) =>
     this.axiosInstance.head(this.getUrl(config && config.pathParams), {
       params: config && config.params,
       data: config && config.data
@@ -106,9 +113,9 @@ export default class {
    *
    * @memberof Controller
    */
-  public post = <T = any>(config: IRequestConfig | object) => {
+  public post = <T = any>(config: RequestConfig | object) => {
     if (this.isRequestConfig(config)) {
-      const p = <IRequestConfig>config;
+      const p = <RequestConfig>config;
       return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data);
     }
 
@@ -120,7 +127,7 @@ export default class {
    *
    * @memberof Controller
    */
-  public put = <T = any>(config: IRequestConfig) => {
+  public put = <T = any>(config: RequestConfig) => {
     if (!config.data) throw 'data is required';
     return this.axiosInstance.put<T>(
       this.getUrl(config.pathParams),
@@ -133,7 +140,7 @@ export default class {
    *
    * @memberof Controller
    */
-  public patch = <T = any>(config: IRequestConfig) => {
+  public patch = <T = any>(config: RequestConfig) => {
     if (!config.data) throw 'data is required';
     return this.axiosInstance.patch<T>(
       this.getUrl(config.pathParams),
