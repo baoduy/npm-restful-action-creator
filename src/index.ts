@@ -1,4 +1,4 @@
 import Restful from './RestfulApi';
-import { AxiosRequestConfig } from 'axios';
+import { RestfulApiConfig } from './InterfaceTypes';
 
-export default (config: AxiosRequestConfig | string) => new Restful(config);
+export default (config: RestfulApiConfig | string) => new Restful(config);

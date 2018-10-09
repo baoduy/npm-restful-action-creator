@@ -1,9 +1,9 @@
 import Controller from './Controller';
-import { AxiosRequestConfig } from 'axios';
+import { RestfulApiConfig } from './InterfaceTypes';
 
 export default class {
-  config: AxiosRequestConfig;
-  constructor(config: AxiosRequestConfig | string) {
+  config: RestfulApiConfig;
+  constructor(config: RestfulApiConfig | string) {
     this.config = typeof config === 'string' ? { baseURL: config } : config;
   }
 
