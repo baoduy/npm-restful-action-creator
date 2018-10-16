@@ -16,11 +16,13 @@ import {
  */
 
 export default class {
+  public name: string;
   private axiosInstance: AxiosInstance;
   private url: string;
   private errorHandler?: ErrorHandler;
 
   constructor(config: ControllerConfig) {
+    this.name = config.url.toUpperCase(); //Consider Url is name of controller.
     this.url = config.url;
     this.errorHandler = config.errorHandler;
 
