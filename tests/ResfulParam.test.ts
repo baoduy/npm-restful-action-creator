@@ -7,6 +7,10 @@ const restApi = RestfulCreator({
 describe('Test comments', () => {
   const todoApi = restApi.create('comments');
 
+  test('name', () => {
+    expect(todoApi.name).toBe('comments'.toUpperCase());
+  });
+
   test('get', async () => {
     const item = await todoApi.get({ postId: 1 });
 

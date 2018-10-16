@@ -1,6 +1,6 @@
 {
   "name": "restful-action-creator",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "The helper lib to create the Restful commonicator for SPA.",
   "main": "lib/index.js",
   "directories": {
