@@ -56,6 +56,7 @@ export default RestfulCreator({
 ```
 2. Define the mathed for each controller.
 ```javascript
+//The CustomerApi.ts
 import RestfulCreator from './RestfulCreator';
 const CustomerApi = RestfulCreator.create('CoreData/Customers');
 
@@ -101,7 +102,14 @@ export default {
 ```
 With this helper library and just a few lines of codes, I can create all 11 actions accordingly to the Restful API above.
 
-### 3. How PathParams works?
+### 3. Benefits
+The benefits when putting all related API into a single module is:
+1. Consolidated the endpoint definition and actions into a single module.
+2. Just call the methods with parameters for all subsequent use.
+3. Easier for maintaining if any endpoint or parameters got changed.
+4. Standardized the coding for all API communication methods.
+
+### 4. How PathParams works?
 There is a new property named **pathParams** had been introduced in this library which allows building the path URL of the endpoint.
 
 So, example: 
