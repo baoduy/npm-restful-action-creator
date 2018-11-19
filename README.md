@@ -62,23 +62,25 @@ const CustomerApi = RestfulCreator.create('CoreData/Customers');
 export default {
     //1. Get All Customers
     get:() => api.get(),
-    //3. Get Customer by Id
-    getById: (id: number) => CustomerApi.get({pathParams: id}),
-    //11. Soft Delete Customer
-    archive: (id: number) => CustomerApi.delete({pathParams: [id, 'Archive']}),
-    //5. Hard Delete Customer
-    delete:(customer: any) => CustomerApi.delete({
-        pathParams: customer.id, 
-        data: customer }),
     //2. Create New Customer
     create: (customer: any) => CustomerApi.post(customer),
+    //3. Get Customer by Id
+    getById: (id: number) => CustomerApi.get({pathParams: id}),
     //4. Update Customer.
     update: (customer: any) => CustomerApi.put({ 
         pathParams: customer.id, 
         data: customer }),
-    //7. Create or Update Department
-    createOrUpdateDepartment: (id: number, department: any) => CustomerApi.put({ 
-        pathParams: [id, 'Departments'], 
+     //5. Hard Delete Customer
+    delete:(customer: any) => CustomerApi.delete({
+        pathParams: customer.id, 
+        data: customer }),
+    //6. Update a Department
+    createOrUpdateDepartment: (customerId: number, department: any) => CustomerApi.post({ 
+        pathParams: [customerId, 'Departments'], 
+        data: department }),
+    //7. Create a new Department
+    createOrUpdateDepartment: (customerId: number, department: any) => CustomerApi.put({ 
+        pathParams: [customerId, 'Departments'], 
         data: department }),
     //8. Delete Department
     deleteDeprtment: (customerId: number, department: any) => CustomerApi.delete({
@@ -92,7 +94,9 @@ export default {
     deleteNote: (customerId: number, note: any) => CustomerApi.delete({
       pathParams: [customerId, 'Notes', note.id],
       data: note
-    })
+    }),
+    //11. Soft Delete Customer
+    archive: (id: number) => CustomerApi.delete({pathParams: [id, 'Archive']})
 };
 ```
 With this helper library and just a few lines of codes, I can create all 11 actions accordingly to the Restful API above.
