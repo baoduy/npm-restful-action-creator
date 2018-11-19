@@ -134,6 +134,9 @@ pathParams: {id:1,type:'archive'} => the url: */CoreData.Customers/1/archive*
 pathParams: [2,'Departments'] => the url: */CoreData.Customers/2/Departments*
 pathParams: 10 => the url: */CoreData.Customers/10*
 
+## Supporting Features
+This library internally using **axios** library for all Web API communication so that, it supporting all feature of axis provided [here](https://github.com/axios/axios).
+
 ## Source Code
 This library fully developed by using TypeScript which you can download from [here](https://github.com/baoduy/restful-action-creator) and it has 100% unit tests coved.
 
