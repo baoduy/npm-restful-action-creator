@@ -10,16 +10,16 @@ npm i restful-action-creator
 [![DevDependencies](https://img.shields.io/david/dev/baoduy/Restful-Action-Creator.svg)](https://david-dm.org/baoduy/Restful-Action-Creator?type=develop)
 
 ## How It Work?
-Let's review the Rest endpoint below which have the:
+Let's review the Rest API below which has the:
 - Base URL: http://localhost
 - The endpoint: /api/CoreDate/Customers
-- 11 Actions which allow manipulating the customer information includes Departments and Notes.
+- 11 Actions that allow manipulating the customer information includes Departments and Notes.
 ![RestApi](https://raw.githubusercontent.com/baoduy/restful-action-creator/develop/docs/SampleResApi.PNG)
 
 ### 1. Develop Client Actions Helper for SPA application
-Assume, I using React JS Framework here to develop an SPA application. However, this component will work for all (Angular, Vue, PreactJs, ...) frameworks.
 
-For each actions above we need to develop a method which calling the API and return the value as below. 
+For each actions of the Api above we need to develop a method which calling the API and return the value as the sample below. 
+
 ```javascript
 const axios = require('axios');
 //Create instance
@@ -43,10 +43,15 @@ const GetCustomers = async (id: number) => {
 }
 ```
 >*I'm using [Axios](https://github.com/axios/axios) as a helper for all Rest call this is a great library and saving a lot of efforts when working with Rest on Javascript application development.*
-Review the code above, All the methods look like similar, except the endpoint and parameters.
+
+Review the code above, All the methods look like similar, except the endpoint URL and parameters.
 
 ### 2. What Restful-Action-Creator can help.
-1. It allows defining a Global API instance at **RestfulCreator.ts** which shall be shared to all controllers.
+As you know each Web API will have a base URL with multi endpoint and each endpoint representative for a data type with multi actions (get, post, put, delete, ...) allow the consumer working with that data. 
+
+This library had been developed allow to simulate exactly the same hierarchy above.
+
+1. I defined a Global API instance for the Web API in **RestfulCreator.ts** which shall be shared to all endpoints development later.
 ```javascript
 //File RestfulCreator.ts
 import RestfulCreator from 'restful-action-creator';
@@ -54,10 +59,13 @@ export default RestfulCreator({
   baseURL: 'http://localhost/api/'
 });
 ```
-2. Define the mathed for each controller.
+2. For each endpoint I will create separate as below.
+
 ```javascript
 //The CustomerApi.ts
+//import the creator above.
 import RestfulCreator from './RestfulCreator';
+//Create endpoint for Customer.
 const CustomerApi = RestfulCreator.create('CoreData/Customers');
 
 export default {
@@ -100,7 +108,12 @@ export default {
     archive: (id: number) => CustomerApi.delete({pathParams: [id, 'Archive']})
 };
 ```
-With this helper library and just a few lines of codes, I can create all 11 actions accordingly to the Restful API above.
+
+The **CustomerApi** have a full list of all actions mentioned above, However, they are just common methods and may cause confusing to the developer who uses this instance to call the API.
+
+Instead, I wrapped the instance and create the exposing of the list of actions available for each endpoint.
+
+As you see, with this helper library and just a few lines of codes, I can create all 11 actions accordingly to the Restful API above.
 
 ### 3. Benefits
 The benefits when putting all related API into a single module is:
@@ -121,5 +134,8 @@ pathParams: {id:1,type:'archive'} => the url: */CoreData.Customers/1/archive*
 pathParams: [2,'Departments'] => the url: */CoreData.Customers/2/Departments*
 pathParams: 10 => the url: */CoreData.Customers/10*
 
-# Source Code
+## Source Code
 This library fully developed by using TypeScript which you can download from [here](https://github.com/baoduy/restful-action-creator) and it has 100% unit tests coved.
+
+**Hope the library use full.**
+ [drunkcodibg](http://drunkcoding.net)
