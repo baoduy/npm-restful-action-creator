@@ -1,9 +1,9 @@
-import RestfulCreator from '../src';
+import RestCreator from '../src';
 
 describe('Test Error Handler', () => {
   const func1 = jest.fn();
 
-  const restApi = RestfulCreator({
+  const restApi = RestCreator({
     baseURL: 'http://hbd.com',
     errorHandler: func1
   });

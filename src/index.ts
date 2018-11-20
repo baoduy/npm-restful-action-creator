@@ -1,4 +1,4 @@
-import Restful from './RestfulApi';
-import { RestfulApiConfig } from './InterfaceTypes';
+import RestClient from './RestClient';
+import { RestConfig } from './InterfaceTypes';
 
-export default (config: RestfulApiConfig | string) => new Restful(config);
+export default (config: RestConfig | string) => new RestClient(config);

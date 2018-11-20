@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { mergeUrl } from './helper';
 import {
   ErrorHandler,
-  ControllerConfig,
+  RestEndpointConfig,
   RequestConfig
 } from './InterfaceTypes';
 
@@ -21,7 +21,7 @@ export default class {
   private url: string;
   private errorHandler?: ErrorHandler;
 
-  constructor(config: ControllerConfig) {
+  constructor(config: RestEndpointConfig) {
     this.name = config.url.toUpperCase(); //Consider Url is name of controller.
     this.url = config.url;
     this.errorHandler = config.errorHandler;
@@ -52,6 +52,12 @@ export default class {
     this.axiosInstance.interceptors.request.use(undefined, this.errorHandler);
     this.axiosInstance.interceptors.response.use(undefined, this.errorHandler);
   }
+
+  /**
+   * @description calling multi actions from API
+   */
+  public all = <T>(values: (T | Promise<T>)[]) =>
+    axios.all(values).then(axios.spread((...args: T[]) => args));
 
   /**
    *The original request of Axios
