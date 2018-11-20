@@ -1,10 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { mergeUrl } from './helper';
-import {
-  ErrorHandler,
-  RestEndpointConfig,
-  RequestConfig
-} from './InterfaceTypes';
+import { RestEndpointConfig, RequestConfig } from './InterfaceTypes';
 
 /**
  *The request parameters.
@@ -15,28 +11,28 @@ import {
  * @interface RequestConfig
  */
 
-export default class {
+export default class RestEndpoint {
+  private config: RestEndpointConfig;
   public name: string;
   private axiosInstance: AxiosInstance;
-  private url: string;
-  private errorHandler?: ErrorHandler;
 
   constructor(config: RestEndpointConfig) {
-    this.name = config.url.toUpperCase(); //Consider Url is name of controller.
-    this.url = config.url;
-    this.errorHandler = config.errorHandler;
+    this.config = config;
+    this.name = config.url.toUpperCase(); //Consider Url is name of the endpoint.
 
     this.axiosInstance = axios.create(config);
     //Apply error handler
     this.applyErrorHandler();
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string | number) => {
-    const finalUrl = mergeUrl(this.url, pathParams);
-    return finalUrl;
-  };
+  private getUrl = (pathParams?: object | Array<any> | string | number) =>
+    mergeUrl(this.config.url, pathParams);
 
-  private isRequestConfig = (obj?: any) =>
+  /**
+   * @description check whether object is {RequestConfig} or not
+   * @private
+   */
+  private static isRequestConfig = (obj?: any) =>
     obj &&
     (obj.hasOwnProperty('pathParams') ||
       obj.hasOwnProperty('params') ||
@@ -47,10 +43,16 @@ export default class {
    * In-case you disabled it then use this method to re-enable it.
    */
   private applyErrorHandler() {
-    if (!this.errorHandler) return;
+    if (!this.config.errorHandler) return;
 
-    this.axiosInstance.interceptors.request.use(undefined, this.errorHandler);
-    this.axiosInstance.interceptors.response.use(undefined, this.errorHandler);
+    this.axiosInstance.interceptors.request.use(
+      undefined,
+      this.config.errorHandler
+    );
+    this.axiosInstance.interceptors.response.use(
+      undefined,
+      this.config.errorHandler
+    );
   }
 
   /**
@@ -73,7 +75,7 @@ export default class {
    * @memberof Controller
    */
   public get = <T = any>(config?: RequestConfig | object) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
       return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
         params: p.params,
@@ -94,7 +96,7 @@ export default class {
   public delete = (
     config: RequestConfig | any | Array<any> | string | number
   ) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
       return this.axiosInstance.delete(this.getUrl(p.pathParams), {
         params: p.params,
@@ -122,7 +124,7 @@ export default class {
    * @memberof Controller
    */
   public post = <T = any>(config: RequestConfig | object) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
       return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data);
     }
