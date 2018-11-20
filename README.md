@@ -188,4 +188,4 @@ This library fully developed by using TypeScript which you can download from [he
 
 **Hope the library use full.**
 
-[drunkcodibg](http://drunkcoding.net)
+[drunkcoding](http://drunkcoding.net)
