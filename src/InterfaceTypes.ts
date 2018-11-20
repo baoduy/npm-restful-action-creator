@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 
 export type ErrorHandler = (error: any) => Promise<any>;
 
-export interface RestfulApiConfig extends AxiosRequestConfig {
+export interface RestConfig extends AxiosRequestConfig {
   /** Global Exception Handler*/
   errorHandler?: ErrorHandler;
 }
@@ -11,9 +11,9 @@ export interface RestfulApiConfig extends AxiosRequestConfig {
  *Controller configuration
  * @export
  * @interface ControllerConfig
- * @extends {RestfulApiConfig}
+ * @extends {RestConfig}
  */
-export interface ControllerConfig extends RestfulApiConfig {
+export interface RestEndpointConfig extends RestConfig {
   url: string;
 }
 
