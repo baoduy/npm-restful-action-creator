@@ -1,10 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
+import { RequestConfig, RestEndpointConfig } from './InterfaceTypes';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+
 import { mergeUrl } from './helper';
-import {
-  ErrorHandler,
-  RestEndpointConfig,
-  RequestConfig
-} from './InterfaceTypes';
 
 /**
  *The request parameters.
@@ -15,28 +12,28 @@ import {
  * @interface RequestConfig
  */
 
-export default class {
+export default class RestEndpoint {
+  private config: RestEndpointConfig;
   public name: string;
   private axiosInstance: AxiosInstance;
-  private url: string;
-  private errorHandler?: ErrorHandler;
 
   constructor(config: RestEndpointConfig) {
-    this.name = config.url.toUpperCase(); //Consider Url is name of controller.
-    this.url = config.url;
-    this.errorHandler = config.errorHandler;
+    this.config = config;
+    this.name = config.url.toUpperCase(); //Consider Url is name of the endpoint.
 
     this.axiosInstance = axios.create(config);
     //Apply error handler
     this.applyErrorHandler();
   }
 
-  private getUrl = (pathParams?: object | Array<any> | string | number) => {
-    const finalUrl = mergeUrl(this.url, pathParams);
-    return finalUrl;
-  };
+  private getUrl = (pathParams?: object | Array<any> | string | number) =>
+    mergeUrl(this.config.url, pathParams);
 
-  private isRequestConfig = (obj?: any) =>
+  /**
+   * @description check whether object is {RequestConfig} or not
+   * @private
+   */
+  private static isRequestConfig = (obj?: any) =>
     obj &&
     (obj.hasOwnProperty('pathParams') ||
       obj.hasOwnProperty('params') ||
@@ -47,10 +44,16 @@ export default class {
    * In-case you disabled it then use this method to re-enable it.
    */
   private applyErrorHandler() {
-    if (!this.errorHandler) return;
+    if (!this.config.errorHandler) return;
 
-    this.axiosInstance.interceptors.request.use(undefined, this.errorHandler);
-    this.axiosInstance.interceptors.response.use(undefined, this.errorHandler);
+    this.axiosInstance.interceptors.request.use(
+      undefined,
+      this.config.errorHandler
+    );
+    this.axiosInstance.interceptors.response.use(
+      undefined,
+      this.config.errorHandler
+    );
   }
 
   /**
@@ -62,7 +65,7 @@ export default class {
   /**
    *The original request of Axios
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public request = <T = any>(config: AxiosRequestConfig) =>
     this.axiosInstance.request<T>(config);
@@ -70,10 +73,10 @@ export default class {
   /**
    *GET action
    * get method. if config is not IRequestConfig it will pass as  params
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public get = <T = any>(config?: RequestConfig | object) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
       return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
         params: p.params,
@@ -89,12 +92,12 @@ export default class {
   /**
    *DELETE method. if config is not IRequestConfig it will pass as  pathParams
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public delete = (
     config: RequestConfig | any | Array<any> | string | number
   ) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
       return this.axiosInstance.delete(this.getUrl(p.pathParams), {
         params: p.params,
@@ -108,7 +111,7 @@ export default class {
   /**
    *retreive header only of request.
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public head = (config?: RequestConfig) =>
     this.axiosInstance.head(this.getUrl(config && config.pathParams), {
@@ -119,34 +122,39 @@ export default class {
   /**
    *POST action. if config is not IRequestConfig it will pass as data.
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public post = <T = any>(config: RequestConfig | object) => {
-    if (this.isRequestConfig(config)) {
+    if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
-      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data);
+      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data, {
+        params: p.params
+      });
     }
 
-    return this.axiosInstance.post<T>(this.getUrl(), config);
+    return this.axiosInstance.post<T>(this.getUrl(), null, config);
   };
 
   /**
    *PUT action
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public put = <T = any>(config: RequestConfig) => {
-    if (!config.data) throw 'data is required';
-    return this.axiosInstance.put<T>(
-      this.getUrl(config.pathParams),
-      config.data
-    );
+    if (RestEndpoint.isRequestConfig(config)) {
+      const p = <RequestConfig>config;
+      return this.axiosInstance.put<T>(this.getUrl(p.pathParams), p.data, {
+        params: p.params
+      });
+    }
+
+    return this.axiosInstance.put<T>(this.getUrl(), null, config);
   };
 
   /**
    *PATCH action
    *
-   * @memberof Controller
+   * @memberof RestEndpoint
    */
   public patch = <T = any>(config: RequestConfig) => {
     if (!config.data) throw 'data is required';

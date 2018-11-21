@@ -27,10 +27,7 @@ describe('Test comments', () => {
       body: 'Duy Hoang'
     });
 
-    expect(item.data).toMatchObject({
-      title: 'Duy Hoang',
-      body: 'Duy Hoang'
-    });
+    expect(item.data.id).toBeGreaterThanOrEqual(100);
   }, 10000);
 
   test('delete', async () => {
