@@ -127,12 +127,11 @@ export default class RestEndpoint {
   public post = <T = any>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
-      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), p.data, {
-        params: p.params
-      });
+      const { data, ...rest } = p;
+      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), data, rest);
     }
 
-    return this.axiosInstance.post<T>(this.getUrl(), null, config);
+    return this.axiosInstance.post<T>(this.getUrl(), config);
   };
 
   /**
@@ -143,12 +142,12 @@ export default class RestEndpoint {
   public put = <T = any>(config: RequestConfig) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const p = <RequestConfig>config;
-      return this.axiosInstance.put<T>(this.getUrl(p.pathParams), p.data, {
-        params: p.params
-      });
+      const { data, ...rest } = p;
+
+      return this.axiosInstance.put<T>(this.getUrl(p.pathParams), data, rest);
     }
 
-    return this.axiosInstance.put<T>(this.getUrl(), null, config);
+    return this.axiosInstance.put<T>(this.getUrl(), config);
   };
 
   /**
