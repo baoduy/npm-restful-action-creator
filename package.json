@@ -54,7 +54,7 @@
     "@types/benchmark": "^1.0.31",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.9",
-    "@types/url-join": "^0.8.2",
+    "@types/url-join": "^4.0.0",
     "axios-mock-adapter": "^1.15.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
