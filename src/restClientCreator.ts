@@ -1,5 +1,5 @@
-import Controller from './RestEndpoint';
-import { RestConfig } from './InterfaceTypes';
+import { RestConfig } from './definitions';
+import RestEndpoint from './restClientEndpoint';
 
 export default class {
   config: RestConfig;
@@ -11,5 +11,5 @@ export default class {
    * Create the Enpoint instance for the relative url.
    * @param {string} url the relative url of the Endpoint
    */
-  public create = (url: string) => new Controller({ ...this.config, url });
+  public create = (url: string) => new RestEndpoint({ ...this.config, url });
 }

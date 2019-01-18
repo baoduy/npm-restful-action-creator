@@ -1,4 +1,4 @@
-import { RequestConfig, RestEndpointConfig } from './InterfaceTypes';
+import { RequestConfig, RestEndpointConfig } from './definitions';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { mergeUrl } from './helper';
