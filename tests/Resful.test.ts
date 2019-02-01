@@ -1,4 +1,5 @@
 import RestfulCreator from '../src';
+
 var MockAdapter = require('axios-mock-adapter');
 var axios = require('axios');
 

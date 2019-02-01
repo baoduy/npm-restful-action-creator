@@ -77,11 +77,8 @@ export default class RestEndpoint {
    */
   public get = <T = any>(config?: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
-        params: p.params,
-        data: p.data
-      });
+      const { pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.get<T>(this.getUrl(pathParams), rest);
     }
 
     return this.axiosInstance.get<T>(this.getUrl(), {
@@ -94,15 +91,10 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public delete = (
-    config: RequestConfig | any | Array<any> | string | number
-  ) => {
+  public delete = <T>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      return this.axiosInstance.delete(this.getUrl(p.pathParams), {
-        params: p.params,
-        data: p.data
-      });
+      const { pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.delete(this.getUrl(pathParams), rest);
     }
 
     return this.axiosInstance.delete(this.getUrl(config));
@@ -126,9 +118,8 @@ export default class RestEndpoint {
    */
   public post = <T = any>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      const { data, ...rest } = p;
-      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), data, rest);
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.post<T>(this.getUrl(pathParams), data, rest);
     }
 
     return this.axiosInstance.post<T>(this.getUrl(), config);
@@ -139,12 +130,10 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public put = <T = any>(config: RequestConfig) => {
+  public put = <T = any>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      const { data, ...rest } = p;
-
-      return this.axiosInstance.put<T>(this.getUrl(p.pathParams), data, rest);
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.put<T>(this.getUrl(pathParams), data, rest);
     }
 
     return this.axiosInstance.put<T>(this.getUrl(), config);
@@ -155,11 +144,12 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public patch = <T = any>(config: RequestConfig) => {
-    if (!config.data) throw 'data is required';
-    return this.axiosInstance.patch<T>(
-      this.getUrl(config.pathParams),
-      config.data
-    );
+  public patch = <T = any>(config: RequestConfig | object) => {
+    if (RestEndpoint.isRequestConfig(config)) {
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.patch<T>(this.getUrl(pathParams), data, rest);
+    }
+
+    return this.axiosInstance.patch<T>(this.getUrl(), config);
   };
 }

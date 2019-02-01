@@ -21,4 +21,5 @@ export interface RequestConfig {
   pathParams?: object | Array<any> | string | number;
   params?: object;
   data?: object;
+  [key: string]: any;
 }
