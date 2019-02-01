@@ -38,8 +38,6 @@ jobs:
       # Build
       - run: npm run git-jest && npm run build && npm run test-ci
       - deploy:
-          environment:
-            NPM_TOKEN: 736ccabe-8cb8-4098-ac96-27cf6b98db51
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               npm run ci-publish || true

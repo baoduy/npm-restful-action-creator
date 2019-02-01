@@ -29,6 +29,8 @@ Let's review the Rest API below which has the:
 
 For each actions of the Api above we need to develop a method which calling the API and return the value as the sample below.
 
+BEFORE
+
 ```javascript
 const axios = require('axios');
 //Create instance
@@ -50,6 +52,8 @@ const GetCustomers = async (id: number) => {
   const response = await instance.get('/Customers/' + id);
   return response.data;
 };
+//4. Others
+...
 ```
 
 > _I'm using [Axios](https://github.com/axios/axios) as a helper for all Rest call this is a great library and saving a lot of efforts when working with Rest on Javascript application development._
@@ -63,6 +67,8 @@ As you know each Web API will have a base URL with multi endpoint and each endpo
 This library had been developed allow to simulate exactly the same hierarchy above.
 
 1. I defined a Global API instance for the Web API in **RestfulCreator.ts** which shall be shared to all endpoints development later.
+
+AFTER
 
 ```javascript
 //File RestCreator.ts
@@ -140,6 +146,15 @@ The **CustomerApi** have a full list of all actions mentioned above, However, th
 Instead, I wrapped the instance and create the exposing of the list of actions available for each endpoint.
 
 As you see, with this helper library and just a few lines of codes, I can create all 11 actions accordingly to the Restful API above.
+
+CONSUMMER
+
+```javascript
+import CustomerApi from 'CustomerApi';
+
+const listOfCustomer = await CustomerApi.get();
+const customer = await CustomerApi.getBById(1);
+```
 
 ### 3. Benefits
 

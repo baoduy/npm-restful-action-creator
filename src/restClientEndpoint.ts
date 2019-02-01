@@ -1,4 +1,4 @@
-import { RequestConfig, RestEndpointConfig } from './InterfaceTypes';
+import { RequestConfig, RestEndpointConfig } from './definitions';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import { mergeUrl } from './helper';
@@ -23,7 +23,7 @@ export default class RestEndpoint {
 
     this.axiosInstance = axios.create(config);
     //Apply error handler
-    this.applyErrorHandler();
+    this.applyHandlers();
   }
 
   private getUrl = (pathParams?: object | Array<any> | string | number) =>
@@ -39,17 +39,12 @@ export default class RestEndpoint {
       obj.hasOwnProperty('params') ||
       obj.hasOwnProperty('data'));
 
-  /**
-   * If ErrorHandler is provided in the configuration then it will be enabled automatically.
-   * In-case you disabled it then use this method to re-enable it.
-   */
-  private applyErrorHandler() {
-    if (!this.config.errorHandler) return;
-
+  private applyHandlers() {
     this.axiosInstance.interceptors.request.use(
-      undefined,
+      this.config.onRequesting,
       this.config.errorHandler
     );
+
     this.axiosInstance.interceptors.response.use(
       undefined,
       this.config.errorHandler
@@ -77,11 +72,8 @@ export default class RestEndpoint {
    */
   public get = <T = any>(config?: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      return this.axiosInstance.get<T>(this.getUrl(p.pathParams), {
-        params: p.params,
-        data: p.data
-      });
+      const { pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.get<T>(this.getUrl(pathParams), rest);
     }
 
     return this.axiosInstance.get<T>(this.getUrl(), {
@@ -94,15 +86,10 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public delete = (
-    config: RequestConfig | any | Array<any> | string | number
-  ) => {
+  public delete = <T>(config: RequestConfig | string | number) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      return this.axiosInstance.delete(this.getUrl(p.pathParams), {
-        params: p.params,
-        data: p.data
-      });
+      const { pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.delete(this.getUrl(pathParams), rest);
     }
 
     return this.axiosInstance.delete(this.getUrl(config));
@@ -126,9 +113,8 @@ export default class RestEndpoint {
    */
   public post = <T = any>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      const { data, ...rest } = p;
-      return this.axiosInstance.post<T>(this.getUrl(p.pathParams), data, rest);
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.post<T>(this.getUrl(pathParams), data, rest);
     }
 
     return this.axiosInstance.post<T>(this.getUrl(), config);
@@ -139,12 +125,10 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public put = <T = any>(config: RequestConfig) => {
+  public put = <T = any>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
-      const p = <RequestConfig>config;
-      const { data, ...rest } = p;
-
-      return this.axiosInstance.put<T>(this.getUrl(p.pathParams), data, rest);
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.put<T>(this.getUrl(pathParams), data, rest);
     }
 
     return this.axiosInstance.put<T>(this.getUrl(), config);
@@ -155,11 +139,12 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public patch = <T = any>(config: RequestConfig) => {
-    if (!config.data) throw 'data is required';
-    return this.axiosInstance.patch<T>(
-      this.getUrl(config.pathParams),
-      config.data
-    );
+  public patch = <T = any>(config: RequestConfig | object) => {
+    if (RestEndpoint.isRequestConfig(config)) {
+      const { data, pathParams, ...rest } = config as RequestConfig;
+      return this.axiosInstance.patch<T>(this.getUrl(pathParams), data, rest);
+    }
+
+    return this.axiosInstance.patch<T>(this.getUrl(), config);
   };
 }
