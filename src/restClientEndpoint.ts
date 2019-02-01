@@ -23,7 +23,7 @@ export default class RestEndpoint {
 
     this.axiosInstance = axios.create(config);
     //Apply error handler
-    this.applyErrorHandler();
+    this.applyHandlers();
   }
 
   private getUrl = (pathParams?: object | Array<any> | string | number) =>
@@ -39,17 +39,12 @@ export default class RestEndpoint {
       obj.hasOwnProperty('params') ||
       obj.hasOwnProperty('data'));
 
-  /**
-   * If ErrorHandler is provided in the configuration then it will be enabled automatically.
-   * In-case you disabled it then use this method to re-enable it.
-   */
-  private applyErrorHandler() {
-    if (!this.config.errorHandler) return;
-
+  private applyHandlers() {
     this.axiosInstance.interceptors.request.use(
-      undefined,
+      this.config.onRequesting,
       this.config.errorHandler
     );
+
     this.axiosInstance.interceptors.response.use(
       undefined,
       this.config.errorHandler
@@ -91,7 +86,7 @@ export default class RestEndpoint {
    *
    * @memberof RestEndpoint
    */
-  public delete = <T>(config: RequestConfig | object) => {
+  public delete = <T>(config: RequestConfig | string | number) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const { pathParams, ...rest } = config as RequestConfig;
       return this.axiosInstance.delete(this.getUrl(pathParams), rest);
