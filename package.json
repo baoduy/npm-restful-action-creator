@@ -52,7 +52,7 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-typescript": "^7.1.0",
     "@types/benchmark": "^1.0.31",
-    "@types/jest": "^23.3.11",
+    "@types/jest": "^24.0.0",
     "@types/node": "^10.12.18",
     "@types/url-join": "^4.0.0",
     "axios-mock-adapter": "^1.16.0",
