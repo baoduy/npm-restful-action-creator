@@ -1,6 +1,6 @@
 {
   "name": "restful-action-creator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "The helper lib to create the Restful commonicator for SPA.",
   "main": "lib/index.js",
   "directories": {
@@ -16,7 +16,7 @@
     "publish:whole": "npm publish .",
     "publish:all": "npm-run-all build publish:whole",
     "ci-publish": "ci-publish",
-    "codecov": "codecov -t 48afb0d5-3dd1-4c5e-b761-23abbfdf9aba",
+    "codecov": "codecov",
     "test-bundle": "bundlesize",
     "test": "jest --watch --coverage --config=configs/jest/ts.jest.json",
     "test-ci": "jest --ci --coverage --config=configs/jest/ts.jest.json && npm run codecov",
