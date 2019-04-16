@@ -12,7 +12,7 @@ describe('Test comments', () => {
   });
 
   test('get', async () => {
-    const item = await todoApi.get({ postId: 1 });
+    const item = await todoApi.get<Array<any>>({ postId: 1 });
 
     expect(item.data.length).toBe(5);
   });
@@ -22,7 +22,7 @@ describe('Test comments', () => {
   const todoApi = restApi.create('posts');
 
   test('post', async () => {
-    const item = await todoApi.post({
+    const item = await todoApi.post<{ id: number }>({
       title: 'Duy Hoang',
       body: 'Duy Hoang'
     });
