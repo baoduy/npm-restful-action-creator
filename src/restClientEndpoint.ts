@@ -12,7 +12,7 @@ import { mergeUrl } from './helper';
  * @interface RequestConfig
  */
 
-export default class RestEndpoint<T> {
+export default class RestEndpoint {
   private config: RestEndpointConfig;
   public name: string;
   private axiosInstance: AxiosInstance;
@@ -54,7 +54,7 @@ export default class RestEndpoint<T> {
   /**
    * @description calling multi actions from API
    */
-  public all = (values: Array<T | Promise<T>>) =>
+  public all = <T>(values: Array<T | Promise<T>>) =>
     axios.all(values).then(axios.spread((...args: T[]) => args));
 
   /**
@@ -62,7 +62,7 @@ export default class RestEndpoint<T> {
    *
    * @memberof RestEndpoint
    */
-  public request = (config: AxiosRequestConfig) =>
+  public request = <T>(config: AxiosRequestConfig) =>
     this.axiosInstance.request<T>(config);
 
   /**
@@ -70,7 +70,7 @@ export default class RestEndpoint<T> {
    * get method. if config is not IRequestConfig it will pass as  params
    * @memberof RestEndpoint
    */
-  public get = (config?: RequestConfig | object) => {
+  public get = <T>(config?: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const { pathParams, ...rest } = config as RequestConfig;
       return this.axiosInstance.get<T>(this.getUrl(pathParams), rest);
@@ -111,7 +111,7 @@ export default class RestEndpoint<T> {
    *
    * @memberof RestEndpoint
    */
-  public post = (config: RequestConfig | object) => {
+  public post = <T>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const { data, pathParams, ...rest } = config as RequestConfig;
       return this.axiosInstance.post<T>(this.getUrl(pathParams), data, rest);
@@ -125,7 +125,7 @@ export default class RestEndpoint<T> {
    *
    * @memberof RestEndpoint
    */
-  public put = (config: RequestConfig | object) => {
+  public put = <T>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const { data, pathParams, ...rest } = config as RequestConfig;
       return this.axiosInstance.put<T>(this.getUrl(pathParams), data, rest);
@@ -139,7 +139,7 @@ export default class RestEndpoint<T> {
    *
    * @memberof RestEndpoint
    */
-  public patch = (config: RequestConfig | object) => {
+  public patch = <T>(config: RequestConfig | object) => {
     if (RestEndpoint.isRequestConfig(config)) {
       const { data, pathParams, ...rest } = config as RequestConfig;
       return this.axiosInstance.patch<T>(this.getUrl(pathParams), data, rest);
