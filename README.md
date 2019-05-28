@@ -3,6 +3,7 @@
 ```cmd
 npm i restful-action-creator
 ```
+[![BundleSize](https://badgen.net/bundlephobia/min/react)]
 
 [![CircleCI](https://circleci.com/gh/baoduy/Restful-Action-Creator.svg?style=svg)](https://circleci.com/gh/baoduy/Restful-Action-Creator)
 
