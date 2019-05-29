@@ -3,6 +3,8 @@
 ```cmd
 npm i restful-action-creator
 ```
+
+![publishsize](https://badgen.net/packagephobia/publish/restful-action-creator)
 ![BundleSize](https://badgen.net/bundlephobia/min/restful-action-creator)
 [![CircleCI](https://circleci.com/gh/baoduy/restful-action-creator.svg?style=svg)](https://circleci.com/gh/baoduy/restful-action-creator)
 [![codecov](https://codecov.io/gh/baoduy/Restful-Action-Creator/branch/develop/graph/badge.svg)](https://codecov.io/gh/baoduy/Restful-Action-Creator)
