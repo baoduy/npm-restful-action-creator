@@ -13,12 +13,12 @@ describe('Test Controller', () => {
   const todoApi = restApi.create('comments');
 
   test('get by path param todo 1', async () => {
-    await todoApi.get({ pathParams: '1' });
+    await todoApi.get({ path: '1' });
     expect(requestHandler).toHaveBeenCalled();
   });
 
   test('GET todo 1', async () => {
-    await todoApi.get({ params: 'AAA' });
+    await todoApi.get({ params: { id: 'AAA' } });
     expect(errorHandler).toHaveBeenCalled();
   });
 });

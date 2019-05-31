@@ -33,7 +33,7 @@ describe('Test Controller', () => {
   const todoApi = restApi.create('tests');
 
   test('get by path param todo 1', async () => {
-    const item = await todoApi.get({ pathParams: '1' });
+    const item = await todoApi.get({ path: '1' });
 
     expect(item.config.params).toBeUndefined();
     expect(item.config.data).toBeUndefined();
@@ -69,7 +69,7 @@ describe('Test Controller', () => {
   test('PUT', async () => {
     //Create
     let item = await todoApi.put({
-      pathParams: [10],
+      path: [10],
       data: { id: 10 }
     });
 
@@ -82,7 +82,7 @@ describe('Test Controller', () => {
     //Create
     try {
       await todoApi.put({
-        pathParams: [10]
+        path: [10]
       });
     } catch (ex) {
       expect(ex).toBe('data is required');
@@ -91,7 +91,7 @@ describe('Test Controller', () => {
 
   test('PATCH todo', async () => {
     let item = await todoApi.patch({
-      pathParams: [10],
+      path: [10],
       data: { id: 10 }
     });
 
@@ -103,7 +103,7 @@ describe('Test Controller', () => {
   test('PATCH with NULL data', async () => {
     try {
       await todoApi.patch({
-        pathParams: [10]
+        path: [10]
       });
     } catch (ex) {
       expect(ex).toBe('data is required');
@@ -112,7 +112,7 @@ describe('Test Controller', () => {
 
   test('DELETE todo', async () => {
     let item = await todoApi.delete({
-      pathParams: { id: 10, name: null }
+      path: { id: 10, name: null }
     });
 
     expect(item.config.data).toBeUndefined();
