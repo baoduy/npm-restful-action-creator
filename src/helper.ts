@@ -5,16 +5,16 @@ const convertToArray = (obj: any): Array<any> =>
 
 export const mergeUrl = (
   url: string,
-  pathParams?: object | Array<any> | string | number
+  path?: object | Array<any> | string | number
 ) => {
-  if (!pathParams) return url;
+  if (!path) return url;
 
   let newPath = '';
 
-  if (typeof pathParams === 'string') newPath = pathParams;
-  else if (typeof pathParams === 'number') newPath = pathParams.toString();
+  if (typeof path === 'string') newPath = path;
+  else if (typeof path === 'number') newPath = path.toString();
   else
-    convertToArray(pathParams).forEach(element => {
+    convertToArray(path).forEach(element => {
       if (!element) return;
       newPath = urljoin(newPath, element.toString());
     });

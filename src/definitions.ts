@@ -22,8 +22,12 @@ export interface RestEndpointConfig extends RestConfig {
 }
 
 export interface RequestConfig {
-  pathParams?: object | Array<any> | string | number;
+  /** The path parameters like: /{userId}/Accounts/ then path should be [1,"Accounts"] to get Accounts of User */
+  path?: object | Array<any> | string | number;
+  /** The query string parameters like: ?userId=1&accountId=2 then params should be {userId:1,accountId:2} */
   params?: object;
+  /** The data will be post to API as body */
   data?: object;
+  /** Other  axios config*/
   [key: string]: any;
 }

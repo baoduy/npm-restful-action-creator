@@ -35,20 +35,20 @@ describe('Test comments', () => {
     expect(item.request._header).toContain('DELETE /posts/1');
   }, 10000);
 
-  test('GET pathParams array', async () => {
-    const item = await todoApi.get({ pathParams: [1] });
+  test('GET path array', async () => {
+    const item = await todoApi.get({ path: [1] });
     expect(item.request._header).toContain('GET /posts/1');
   });
 
-  test('GET pathParams value', async () => {
-    const item = await todoApi.get({ pathParams: 1 });
+  test('GET path value', async () => {
+    const item = await todoApi.get({ path: 1 });
     expect(item.request._header).toContain('GET /posts/1');
   });
 
   test('Test run multi requests with All', async () => {
     const item = await todoApi.all([
-      todoApi.get({ pathParams: 1 }),
-      todoApi.get({ pathParams: 2 })
+      todoApi.get({ path: 1 }),
+      todoApi.get({ path: 2 })
     ]);
     expect(item.length).toBe(2);
   });
