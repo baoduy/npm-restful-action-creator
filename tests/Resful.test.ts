@@ -6,7 +6,7 @@ var axios = require('axios');
 const restApi = RestfulCreator({ baseURL: 'http://test/api' });
 var mock = new MockAdapter(axios);
 
-describe('Test Controller', () => {
+describe('Test RestfulCreator', () => {
   mock
     .onGet('http://test/api/tests')
     .reply(200)
