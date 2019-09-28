@@ -5,7 +5,7 @@ import { mergeUrl } from './helper';
 
 /**
  *The request parameters.
- * @path  : the adition path will be added to the original url ex: 'originalUrl/1/subitems/2'
+ * @path  : the addition path will be added to the original url ex: 'originalUrl/1/subitems/2'
  * @params      : the original @params of AxiosRequestConfig
  * @data        : the original @data of AxiosRequestConfig
  * @export
