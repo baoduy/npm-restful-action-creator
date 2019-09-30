@@ -3,7 +3,7 @@
 ## Version 1.2.0
 
 - Support async for onRequesting in order to allow to get authentication token from Provider before calling API.
-- Rename the `paramPath` to `path`
+- Rename the `pathParams` to `path`
 
 ## Version 1.0.2
 
