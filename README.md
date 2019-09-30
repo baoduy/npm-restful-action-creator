@@ -89,51 +89,51 @@ export default {
   //2. Create New Customer
   create: (customer: any) => CustomerApi.post(customer),
   //3. Get Customer by Id
-  getById: (id: number) => CustomerApi.get({ pathParams: id }),
+  getById: (id: number) => CustomerApi.get({ path: id }),
   //4. Update Customer.
   update: (customer: any) =>
     CustomerApi.put({
-      pathParams: customer.id,
+      path: customer.id,
       data: customer
     }),
   //5. Hard Delete Customer
   delete: (customer: any) =>
     CustomerApi.delete({
-      pathParams: customer.id,
+      path: customer.id,
       data: customer
     }),
   //6. Update a Department
   createOrUpdateDepartment: (customerId: number, department: any) =>
     CustomerApi.post({
-      pathParams: [customerId, 'Departments'],
+      path: [customerId, 'Departments'],
       data: department
     }),
   //7. Create a new Department
   createOrUpdateDepartment: (customerId: number, department: any) =>
     CustomerApi.put({
-      pathParams: [customerId, 'Departments'],
+      path: [customerId, 'Departments'],
       data: department
     }),
   //8. Delete Department
   deleteDeprtment: (customerId: number, department: any) =>
     CustomerApi.delete({
-      pathParams: [customerId, 'Departments', department.id],
+      path: [customerId, 'Departments', department.id],
       data: department
     }),
   //9. Create Customer Note.
   createOrUpdateNote: (id: number, note: any) =>
     CustomerApi.put({
-      pathParams: [id, 'Notes'],
+      path: [id, 'Notes'],
       data: note
     }),
   //10. Delete Customer Note
   deleteNote: (customerId: number, note: any) =>
     CustomerApi.delete({
-      pathParams: [customerId, 'Notes', note.id],
+      path: [customerId, 'Notes', note.id],
       data: note
     }),
   //11. Soft Delete Customer
-  archive: (id: number) => CustomerApi.delete({ pathParams: [id, 'Archive'] })
+  archive: (id: number) => CustomerApi.delete({ path: [id, 'Archive'] })
 };
 ```
 
@@ -161,18 +161,18 @@ The benefits when putting all related API into a single module is:
 3. Easier for maintaining if any endpoint or parameters got changed.
 4. Standardized the coding for all API communication methods.
 
-### 4. How PathParams works?
+### 4. How path works?
 
-There is a new property named **pathParams** had been introduced in this library which allows building the path URL of the endpoint.
+There is a new property named **path** had been introduced in this library which allows building the path URL of the endpoint.
 
 So, example:
 when getting all customers we using the endpoint _/CoreData.Customers/_. However, then get a single Customer by Id we need to use _/CoreData.Customers/1_ which 1 is customer id. I call this is path parameter.
 
-The **pathParams** can be an object, array or any primitive value.
+The **path** can be an object, array or any primitive value.
 Example:
-pathParams: {id:1,type:'archive'} => the url: _/CoreData.Customers/1/archive_
-pathParams: [2,'Departments'] => the url: _/CoreData.Customers/2/Departments_
-pathParams: 10 => the url: _/CoreData.Customers/10_
+path: {id:1,type:'archive'} => the url: _/CoreData.Customers/1/archive_
+path: [2,'Departments'] => the url: _/CoreData.Customers/2/Departments_
+path: 10 => the url: _/CoreData.Customers/10_
 
 ## Handling Errors
 
