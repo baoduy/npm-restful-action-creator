@@ -51,7 +51,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-typescript": "^7.6.0",
-    "@types/benchmark": "^1.0.31",
+    "@types/benchmark": "^2.1.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^13.1.0",
     "@types/url-join": "^4.0.0",
